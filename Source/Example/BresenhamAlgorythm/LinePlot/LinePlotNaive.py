@@ -1,4 +1,4 @@
-# Drawing the line pixel by pixel - the wrong way
+# Drawing the line pixel by pixel from mouse clicks - the wrong way
 
 import pygame
 from pygame.locals import *
@@ -11,15 +11,15 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 white = pygame.Color(255, 255, 255)
 green = pygame.Color(0, 255, 0)
 
-def plot_line(point1, point2):
+def plot_line(point0, point1):
     # for loop requires x0 being smaller than x1. This is fixing the not being able to draw on the left side bug
-    if point1[0] > point2[0]:
-        temp = point1
-        point1 = point2
-        point2 = temp
+    if point0[0] > point1[0]:
+        temp = point0
+        point0 = point1
+        point1 = temp
 
-    x0, y0 = point1
-    x1, y1 = point2
+    x0, y0 = point0
+    x1, y1 = point1
 
     # slope = rise / run
     m = (y1 - y0) / (x1 - x0)
