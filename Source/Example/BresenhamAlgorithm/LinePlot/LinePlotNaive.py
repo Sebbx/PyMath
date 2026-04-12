@@ -11,6 +11,8 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 white = pygame.Color(255, 255, 255)
 green = pygame.Color(0, 255, 0)
 
+
+
 def plot_line(point0, point1):
     # for loop requires x0 being smaller than x1. This is fixing the not being able to draw on the left side bug
     if point0[0] > point1[0]:

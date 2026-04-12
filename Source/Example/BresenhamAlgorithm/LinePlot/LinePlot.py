@@ -1,8 +1,6 @@
 # Drawing the line pixel by pixel from mouse clicks - the right Bresenham way
-from xmlrpc.server import DocXMLRPCServer
-
 import pygame
-from pygame.locals import *
+
 pygame.init()
 pygame.display.set_caption("Line Plot")
 screen_width = 800
@@ -12,6 +10,37 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 white = pygame.Color(255, 255, 255)
 green = pygame.Color(0, 255, 0)
 
+#this is working fine, but it is much less optimized because of dividing and float usage
+def plot_line_float(point0, point1):
+    x0, y0 = point0
+    x1, y1 = point1
+
+    dx = x1 - x0
+    dy = y1 - y0
+
+    # Calculate number of steps required
+    # We need to iterate by greater delta dimension and round shorter dimension
+    steps = max(abs(dx), abs(dy))
+
+    # Calculate the groth for each dimension
+    # One dimension will always be = 1, the one that's the delta is greater
+
+    x_step = dx / steps
+    y_step = dy / steps
+
+    # Start from the beginning
+    current_x = x0
+    current_y = y0
+
+    for i in range(int(steps + 1)):
+        screen.set_at((int(round(current_x)), int(round(current_y))), white)
+        pygame.display.update()
+        pygame.event.pump()
+
+        current_x += x_step
+        current_y += y_step
+
+# This is the proper Bresenham way. Only Integers and multiplication
 def plot_line(point0, point1):
     x0, y0 = point0
     x1, y1 = point1
@@ -25,9 +54,9 @@ def plot_line(point0, point1):
     # sx (step x), direction in x, left or right
     # In our example x0 < x1, so sx = 1 (we move right)
     if x0 < x1:
-        sx = 1 # right direction
+        sx = 1  # right direction
     else:
-        sx = -1 # left direction
+        sx = -1  # left direction
 
     # dy = negative absolute difference in Y.
     # The minus sign is required by the algorithm so that the error calculations work correctly.
@@ -37,9 +66,9 @@ def plot_line(point0, point1):
     # direction (down or up)
     # In our example y0 < y1, so sy = 1 (we move down)
     if y0 < y1:
-        sy = 1 # down
+        sy = 1  # down
     else:
-        sy = -1 # up
+        sy = -1  # up
 
     # err = decision variable (error accumulator). A counter that tracks when to move in X or Y.
     # It combines dx and dy to find the best integer path between pixels.
@@ -52,11 +81,11 @@ def plot_line(point0, point1):
 
     while True:
         screen.set_at((current_x, current_y), white)
-        
+
         # to refresh screen while debugging
         pygame.display.update()
         pygame.event.pump()
-        
+
         if current_x == x1 and current_y == y1:
             break
 
@@ -90,34 +119,6 @@ def plot_line(point0, point1):
         # (0,0) → (1,1) → (2,1) → (3,2) → (4,2) → (5,3)
         # This is the best possible line on a pixel grid.
 
-def plot_line_float(point0, point1):
-    x0, y0 = point0
-    x1, y1 = point1
-
-    dx = x1 - x0
-    dy = y1 - y0
-
-    # Calculate number of steps required
-    # We need to iterate by greater delta dimension and round shorter dimension
-    steps = max(abs(dx), abs(dy))
-
-    # Calculate the groth for each dimension
-    # One dimension will always be = 1, the one that's the delta is greater
-
-    x_step = dx / steps
-    y_step = dy / steps
-
-    # Start from the beginning
-    current_x = x0
-    current_y = y0
-
-    for i in range(int(steps + 1)):
-        screen.set_at((int(round(current_x)), int(round(current_y))), white)
-        pygame.display.update()
-        pygame.event.pump()
-
-        current_x += x_step
-        current_y += y_step
 
 timesClicked = 0
 done = False
@@ -128,8 +129,8 @@ while not done:
         point1 = (490, 100)
         # for debugger
         plot_line(point0, point1)
-        #plot_line_float(point0, point1)
-        
+        # plot_line_float(point0, point1)
+
         if event.type == pygame.QUIT:
             done = True
     pygame.display.update()
