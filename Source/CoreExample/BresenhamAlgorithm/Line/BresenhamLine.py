@@ -45,7 +45,7 @@ def plot_line(point0, point1):
     x0, y0 = point0
     x1, y1 = point1
 
-    # Example we will use in ALL comments below: point0 = (0, 0), point1 = (5, 3)
+    # CoreExample we will use in ALL comments below: point0 = (0, 0), point1 = (5, 3)
 
     # dx (delta x), distance from x1 to x0
     # In our example: dx = abs(5 - 0) = 5
